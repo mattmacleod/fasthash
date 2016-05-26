@@ -1,0 +1,1 @@
+require 'fasthash/fasthash'

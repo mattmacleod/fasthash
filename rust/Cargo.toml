@@ -1,0 +1,10 @@
+[package]
+name = "fasthash"
+version = "0.1.0"
+authors = ["Matthew MacLeod <matt@umm.io>"]
+
+[dependencies]
+
+[lib]
+name = "fasthash"
+crate_type = ["staticlib", "dylib"]
