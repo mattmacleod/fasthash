@@ -1,17 +1,33 @@
 #include<stdio.h>
 #include<ruby.h>
 
-extern int rust_add(int, int);
+extern int rust_parse(void *, size_t);
 
-VALUE add(VALUE x, VALUE y) {
-    int result = rust_add(NUM2INT(x), NUM2INT(y));
+VALUE Fasthash = Qnil;
+VALUE Fasthash_Hash = Qnil;
+
+VALUE rb_fasthash_hash_len(VALUE self) {
+    VALUE json = rb_iv_get(self, "@json");
+    
+    int result = rust_parse(StringValuePtr(json), RSTRING_LEN(json));
 
     return INT2FIX(result);
 }
 
-void Init_fasthash(void) {
-    VALUE fasthash = rb_define_module("Fasthash");
-    printf("INIT\n");
+VALUE rb_fasthash_hash_initialize(VALUE self, VALUE json)
+{
+    Check_Type(json, T_STRING);
 
-    rb_define_singleton_method(fasthash, "add", add, 0);
+    rb_iv_set(self, "@json", json);
+
+    return self;
 }
+
+void Init_fasthash(void) {
+    Fasthash = rb_define_module("Fasthash");
+    Fasthash_Hash = rb_define_class_under(Fasthash, "Hash", rb_cObject);
+
+    rb_define_method(Fasthash_Hash, "initialize", rb_fasthash_hash_initialize, 1);
+    rb_define_method(Fasthash_Hash, "len", rb_fasthash_hash_len, 0);
+}
+
