@@ -6,6 +6,7 @@ authors = ["Matthew MacLeod <matt@umm.io>"]
 [dependencies]
 rustc-serialize = "0.3.0"
 libc = "*"
+postgres = "0.11"
 
 [lib]
 name = "fasthash"
